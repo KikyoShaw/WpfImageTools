@@ -58,7 +58,7 @@ namespace WpfApp1
                 graphics.DrawImage(image1, 0, 0, image1.Width, image1.Height);
                 // 画第二张图片
                 graphics.DrawImage(image2, 0, image1.Height, image2.Width, image2.Height);
-            }
+            } //也可以控制拼接的位置
 
             // 4. 保存结果图像
             outputImage.Save(outputImagePath, ImageFormat.Png);
