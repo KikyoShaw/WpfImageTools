@@ -39,5 +39,29 @@ namespace WpfApp1
             bitmap.Save(outputImagePath, ImageFormat.Jpeg);
         }
 
+
+        public void CombineImagesVertically(string inputImagePath1, string inputImagePath2, string outputImagePath)
+        {
+            // 1. 加载图像
+            using Bitmap image1 = new Bitmap(inputImagePath1);
+            using Bitmap image2 = new Bitmap(inputImagePath2);
+
+            // 2. 创建结果图像
+            int outputWidth = Math.Max(image1.Width, image2.Width);
+            int outputHeight = image1.Height + image2.Height;
+            using Bitmap outputImage = new Bitmap(outputWidth, outputHeight);
+
+            // 3. 拼接图像
+            using (Graphics graphics = Graphics.FromImage(outputImage)) //下面可以更改是横向拼接还是纵向拼接
+            {
+                // 画第一张图片
+                graphics.DrawImage(image1, 0, 0, image1.Width, image1.Height);
+                // 画第二张图片
+                graphics.DrawImage(image2, 0, image1.Height, image2.Width, image2.Height);
+            }
+
+            // 4. 保存结果图像
+            outputImage.Save(outputImagePath, ImageFormat.Png);
+        }
     }
 }

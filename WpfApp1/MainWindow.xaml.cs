@@ -27,5 +27,10 @@ namespace WpfApp1
                MainVm.Instance.AddWatermarkToImage(path, "output.jpg", "十三");
             }
         }
+
+        private void ButtonBase2_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainVm.Instance.CombineImagesVertically("1.jpg", "2.jpg", "output.jpg");
+        }
     }
 }

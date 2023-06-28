@@ -10,6 +10,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Height="45" Width="75" Content="添加水印" Click="ButtonBase_OnClick"/>
+            <Button Margin="20 0 0 0" Height="45" Width="75" Content="图片拼接" Click="ButtonBase2_OnClick"/>
         </StackPanel>
     </Grid>
 
