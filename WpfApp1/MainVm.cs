@@ -2,7 +2,10 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 
 namespace WpfApp1
 {
@@ -39,7 +42,12 @@ namespace WpfApp1
             bitmap.Save(outputImagePath, ImageFormat.Jpeg);
         }
 
-
+        /// <summary>
+        /// 拼接图片
+        /// </summary>
+        /// <param name="inputImagePath1"></param>
+        /// <param name="inputImagePath2"></param>
+        /// <param name="outputImagePath"></param>
         public void CombineImagesVertically(string inputImagePath1, string inputImagePath2, string outputImagePath)
         {
             // 1. 加载图像
@@ -63,5 +71,74 @@ namespace WpfApp1
             // 4. 保存结果图像
             outputImage.Save(outputImagePath, ImageFormat.Png);
         }
+
+        /// <summary>
+        /// 裁剪图片
+        /// </summary>
+        /// <param name="inputImagePath"></param>
+        /// <param name="maxWidth"></param>
+        /// <param name="maxHeight"></param>
+        /// <param name="outputImagePath"></param>
+        public void ResizeImage(string inputImagePath, string outputImagePath, int maxWidth = 0, int maxHeight = 0)
+        {
+            // 1. 加载图像
+            using Bitmap originalBitmap = new Bitmap(inputImagePath);
+
+            int originalWidth = originalBitmap.Width;
+            int originalHeight = originalBitmap.Height;
+
+            if (maxWidth == 0)
+                maxWidth = originalWidth;
+
+            if(maxHeight == 0)
+                maxHeight = originalHeight;
+
+            float ratioX = (float)maxWidth / (float)originalWidth;
+            float ratioY = (float)maxHeight / (float)originalHeight;
+
+            float ratio = Math.Min(ratioX, ratioY);
+
+            int newWidth = (int)(originalWidth * ratio);
+            int newHeight = (int)(originalHeight * ratio);
+
+            using Bitmap resizedBitmap = new Bitmap(newWidth, newHeight);
+
+            //裁剪操作
+            using (Graphics graphics = Graphics.FromImage(resizedBitmap))
+            {
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(originalBitmap, 0, 0, newWidth, newHeight);
+            }
+
+            // 保存结果图像
+            resizedBitmap.Save(outputImagePath, ImageFormat.Png);
+        }
+
+        /// <summary>
+        /// 按坐标点裁剪
+        /// </summary>
+        /// <param name="inputImagePath"></param>
+        /// <param name="outputImagePath"></param>
+        /// <param name="newWidth"></param>
+        /// <param name="newHeight"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void CropImage(string inputImagePath, string outputImagePath, int newWidth, int newHeight, int x, int y)
+        {
+            // 1. 加载图像
+            using Bitmap originalBitmap = new Bitmap(inputImagePath);
+
+            Rectangle cropArea = new Rectangle(x, y, newWidth, newHeight);
+            using Bitmap croppedBitmap = originalBitmap.Clone(cropArea, originalBitmap.PixelFormat);
+
+            //裁剪操作
+            using MemoryStream croppedStream = new MemoryStream();
+            croppedBitmap.Save(croppedStream, ImageFormat.Png);
+
+            // 保存结果图像
+            croppedBitmap.Save(outputImagePath, ImageFormat.Png);
+        }
+
     }
 }

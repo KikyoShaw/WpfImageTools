@@ -32,5 +32,15 @@ namespace WpfApp1
         {
             MainVm.Instance.CombineImagesVertically("1.jpg", "2.jpg", "output.jpg");
         }
+
+        private void ButtonBase3_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainVm.Instance.CropImage("1.jpg", "output.jpg", 200, 200, 20, 20);
+        }
+
+        private void ButtonBase4_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainVm.Instance.ResizeImage("1.jpg", "output.jpg", 200, 0);
+        }
     }
 }
